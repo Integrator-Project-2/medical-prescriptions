@@ -5,7 +5,7 @@ from .serializers import MedicalPrescriptionSerializer
 
 class MedicalPrescriptionCreateAPIView(APIView): 
     def post(self, request):
-        serializer = MedicalPrescriptionSerializer
+        serializer = MedicalPrescriptionSerializer(data=request.data)
         
         if serializer.is_valid():
             serializer.save()
