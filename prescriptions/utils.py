@@ -17,4 +17,4 @@ def generate_pdf(prescription_data):
     p.save()
 
     buffer.seek(0)
-    return buffer
+    return buffer.getvalue()

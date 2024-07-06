@@ -7,4 +7,4 @@ class MedicalPrescription(models.Model):
     medication_id = models.IntegerField()
     description = models.TextField()
     dose = models.CharField(max_length=255)
-    prescription_file = models.FileField()
+    prescription_file = models.FileField(upload_to='prescriptions/', null=True, blank=True)
