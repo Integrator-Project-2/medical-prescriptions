@@ -1,9 +1,11 @@
-from rest_framework import status
+import base64
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import MedicalPrescriptionSerializer
-from .utils import generate_pdf
+from rest_framework import status
 from django.core.files.base import ContentFile
+
+from prescriptions.serializers import MedicalPrescriptionSerializer
+from prescriptions.utils import generate_pdf
 
 class MedicalPrescriptionCreateAPIView(APIView): 
     def post(self, request):
@@ -18,7 +20,12 @@ class MedicalPrescriptionCreateAPIView(APIView):
                 f'prescription_{prescription.id}.pdf',
                 ContentFile(pdf_content),
                 save=True
-            ) 
-                       
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            )
+
+            pdf_base64 = base64.b64encode(pdf_content).decode('utf-8')
+            
+            response_data = serializer.data
+            response_data['prescription_pdf'] = pdf_base64
+            
+            return Response(response_data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
